@@ -105,6 +105,7 @@ public class TestAutoRed extends LinearOpMode
 
     private boolean isBlack(ColorSensor sensor)
     {
+
         return (sensor.green() + sensor.red() < 820);
     }
 
