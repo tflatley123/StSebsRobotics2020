@@ -51,26 +51,26 @@ public class TestRobot
     public DcMotor  frontright  = null;
     public DcMotor  backleft    = null;
     public DcMotor  backright   = null;
-    public DcMotor  linear1     = null;
-    public DcMotor  linear2     = null;
+    public DcMotor  linearSlide     = null;
+
 
 
     public DistanceSensor blocksideDistance;
-    public ColorSensor lineColor, blockColor;
+    public ColorSensor blockColorRight, blockColorLeft;
     public BNO055IMU imu; // gyro and accelorometer
 
-    public double frontleftPower, frontrightPower, backleftPower, backrightPower, linear1Power, linear2Power;  // motor powers
+    public double frontleftPower, frontrightPower, backleftPower, backrightPower;  // motor powers
 
     // used to map devices to the robot
     public HardwareMap hwMap = null;
-    /* Constructor */
+
     public TestRobot() { }
 
     public void init(HardwareMap ahwMap)
     {
         // Save reference to Hardware map
         hwMap = ahwMap;
-        imu = hwMap.get(BNO055IMU.class, "imu");
+        imu   = hwMap.get(BNO055IMU.class, "imu");
 
         BNO055IMU.Parameters imuParameters = new BNO055IMU.Parameters();
         imuParameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
@@ -79,17 +79,14 @@ public class TestRobot
         imu.initialize(imuParameters);
 
         // Define and Initialize Motors
-        frontleft  = hwMap.get(DcMotor.class, "frontleft");
-        frontright = hwMap.get(DcMotor.class, "frontright");
-        backleft   = hwMap.get(DcMotor.class, "backleft");
-        backright  = hwMap.get(DcMotor.class, "backright");
-
-        linear1   = hwMap.get(DcMotor.class, "l2");
-        linear2  = hwMap.get(DcMotor.class, "l3");
+        frontleft   = hwMap.get(DcMotor.class, "frontleft");
+        frontright  = hwMap.get(DcMotor.class, "frontright");
+        backleft    = hwMap.get(DcMotor.class, "backleft");
+        backright   = hwMap.get(DcMotor.class, "backright");
+        linearSlide = hwMap.get(DcMotor.class, "linearslide");
 
         // SET THE DIRECTIONS
-        linear1.setDirection(DcMotor.Direction.REVERSE);
-        linear2.setDirection(DcMotor.Direction.FORWARD);
+        
         frontleft.setDirection(DcMotor.Direction.REVERSE);
         backleft.setDirection(DcMotor.Direction.REVERSE);
         frontright.setDirection(DcMotor.Direction.FORWARD);
@@ -102,9 +99,7 @@ public class TestRobot
         backright.setPower(0);
 
         // Set all motors to run with the encoders.
-        linear1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        linear2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
+        linearSlide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         frontleft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         frontright.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backright.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -112,8 +107,9 @@ public class TestRobot
 
         // set up the i2c devices
         blocksideDistance = hwMap.get(DistanceSensor.class, "blocksidedistance");
-        lineColor = hwMap.get(ColorSensor.class, "undercolor");
-        blockColor = hwMap.get(ColorSensor.class, "blockcolor");
+
+        blockColorLeft = hwMap.get(ColorSensor.class, "blockcolorleft");
+        blockColorRight = hwMap.get(ColorSensor.class, "blockcolorright");
     }
 
     public void updateMotorPower()

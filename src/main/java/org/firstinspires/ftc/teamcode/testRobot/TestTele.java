@@ -43,9 +43,9 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.teamcode.TFOD;
 
 
-@TeleOp(name="Testing", group="Autonomous")
+@TeleOp(name="Testing", group="TeleOp")
 //@Disabled
-public class TestAuto extends LinearOpMode
+public class TestTele extends LinearOpMode
 {
     private TestRobot robot = new TestRobot();
 
@@ -67,67 +67,26 @@ public class TestAuto extends LinearOpMode
         {
             if(gamepad1.dpad_down)
             {
-                robot.linear1.setPower(-1);
-                robot.linear2.setPower(-1);
+                robot.linearSlide.setPower(-1);
             }
             else if(gamepad1.dpad_up)
             {
-                robot.linear1.setPower(1);
-                robot.linear2.setPower(1);
+                robot.linearSlide.setPower(1);
             }
             else
             {
-                robot.linear1.setPower(0);
-                robot.linear2.setPower(0);
+                robot.linearSlide.setPower(0);
             }
-            /*// bring it 18 inches from row of blocks (46cm)
-            if(gamepad1.dpad_up)
-                power += 0.1;
-            if(gamepad1.dpad_down)
-                power -= 0.1;
-            if(gamepad1.dpad_right)
-                moveTicks -= 10;
-            if(gamepad1.dpad_left)
-                moveTicks += 10;
-            if(gamepad1.a)
-                move = !move;
-
-
-            addedColor = robot.blockColor.green() + robot.blockColor.red();
-
-
-            // 800 is r + g values with the light on
-            // this is accurate when the bot is btw 7.5 and 4.5 cm away
-
-            if(addedColor < 800)
-            {
-                telemetry.addLine("SkyStone");
-            }
-            telemetry.addData("Power", power);
-            telemetry.addData("Ticks", moveTicks);
-
-            telemetry.addLine();
-
-            telemetry.addData("R2", robot.blockColor.red());
-            telemetry.addData("B2", robot.blockColor.blue());
-            telemetry.addData("G2", robot.blockColor.green());
-
-            telemetry.addLine();
-
-            telemetry.addData("Orientation: ", robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.YXZ, AngleUnit.DEGREES));
-            telemetry.addData("Distance to Block: ", robot.blocksideDistance.getDistance(DistanceUnit.CM));
-
-            if(move)
-            {
-                robot.moveFB(power, moveTicks);
-                move = false;
-            }
-            */
 
             telemetry.addData("Distance to Block: ", robot.blocksideDistance.getDistance(DistanceUnit.CM));
-            telemetry.addData("R2", robot.blockColor.red());
-            telemetry.addData("B2", robot.blockColor.blue());
-            telemetry.addData("G2", robot.blockColor.green());
+            telemetry.addLine("RIGHT");
+            telemetry.addData("R", robot.blockColorRight.red());
+            telemetry.addData("B", robot.blockColorRight.blue());
+            telemetry.addData("G", robot.blockColorRight.green());
+            telemetry.addLine("LEFT");
+            telemetry.addData("R", robot.blockColorLeft.red());
+            telemetry.addData("B", robot.blockColorLeft.blue());
+            telemetry.addData("G", robot.blockColorLeft.green());
 
             telemetry.update();
 

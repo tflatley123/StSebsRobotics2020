@@ -31,6 +31,7 @@ package org.firstinspires.ftc.teamcode.testRobot;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
@@ -40,7 +41,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 
 @Autonomous(name="TestAutoRed", group="Autonomous")
-//@Disabled
+
 public class TestAutoRed extends LinearOpMode
 {
     private TestRobot robot = new TestRobot();
@@ -50,56 +51,31 @@ public class TestAutoRed extends LinearOpMode
 
         robot.init(hardwareMap);
 
-
-
         waitForStart();
-        boolean run = true;
-        while (opModeIsActive())
+
+        if(opModeIsActive())
         {
 
-            /*
-            if (run)
+            while (robot.blocksideDistance.getDistance(DistanceUnit.CM) > 30)
             {
-                while (robot.blocksideDistance.getDistance(DistanceUnit.CM) > 30)
-                {
-                    robot.moveLR(0.55);
-                }
-                straighten();
-                while (robot.blocksideDistance.getDistance(DistanceUnit.CM) > 6.5)
-                {
-                    robot.moveLR(0.3);
-                }
-                robot.zeroMotorPower();
-                straighten();
+                robot.moveLR(0.55);
+            }
+            straighten(robot);
+            while (robot.blocksideDistance.getDistance(DistanceUnit.CM) > 6.5)
+            {
+                robot.moveLR(0.3);
+            }
+            robot.zeroMotorPower();
 
-                for (int i = 0; i < 4; i++)
-                {
-                    if (robot.blockColor.green() + robot.blockColor.red() < 800)
-                        telemetry.addLine("skytone");
-                    else
-                        telemetry.addLine("brock");
 
-                    robot.moveFB(0.7, 505);
-                    while (robot.motorsAreBusy())
-                    {
-                        //this waits for the motors to get into position}
-                    }
-                    //robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.YXZ, AngleUnit.DEGREES)
-                }
-                robot.zeroMotorPower();
-                if (robot.blockColor.green() + robot.blockColor.red() < 820)
-                    telemetry.addLine("skytone");
-                else
-                    telemetry.addLine("brock");
-                run = false;
-                telemetry.update();
-            }*/
+            straighten(robot);
+
         }
     }
 
 
 
-    private void straighten()
+    private void straighten(TestRobot robot)
     {
         boolean isAlligned = false;
 
@@ -127,34 +103,9 @@ public class TestAutoRed extends LinearOpMode
 
     }
 
-    private boolean isBlack()
+    private boolean isBlack(ColorSensor sensor)
     {
-        return (robot.blockColor.green() + robot.blockColor.red() < 820);
+        return (sensor.green() + sensor.red() < 820);
     }
-
-
-
-
-
-
-    private int firstPosition = 0;
-    private int secondPosition = 0;
-/*
-    private void getBlockLayout()
-    {
-        while((firstPosition < 2) || secondPosition == 0)
-        {
-            if(isBlack())
-            {
-                secondPosition = firstPosition + 2;
-            }
-            else
-            {
-                firstPosition++;
-                nextPos;
-            }
-        }
-    }
-*/
 
 }
