@@ -46,6 +46,8 @@ public class TestAutoRed extends LinearOpMode
 {
     private TestRobot robot = new TestRobot();
 
+    private int stonePosition;
+
     @Override
     public void runOpMode() {
 
@@ -66,9 +68,20 @@ public class TestAutoRed extends LinearOpMode
                 robot.moveLR(0.3);
             }
             robot.zeroMotorPower();
-
-
             straighten(robot);
+
+            /*
+            test the isBlack on both the sensors
+            locate the block positions based on a single read from each sensor
+             */
+            if(isBlack(robot.blockColorRight)) // if first block is black
+                stonePosition = 14; // block at position 1 and 4
+
+            else if(isBlack(robot.blockColorLeft)) // if third block is black
+                stonePosition = 36; // block at position 3 and 6
+
+            else // if neither of the blocks are black
+                stonePosition = 25; // block at position 2 and 5
 
         }
     }
@@ -105,7 +118,6 @@ public class TestAutoRed extends LinearOpMode
 
     private boolean isBlack(ColorSensor sensor)
     {
-
         return (sensor.green() + sensor.red() < 820);
     }
 
