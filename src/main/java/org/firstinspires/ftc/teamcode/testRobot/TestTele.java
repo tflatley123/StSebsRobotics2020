@@ -65,18 +65,90 @@ public class TestTele extends LinearOpMode
 
         while (opModeIsActive())
         {
-            if(gamepad1.dpad_down)
+            robot.backleftPower = gamepad1.left_stick_y;
+            robot.frontleftPower = gamepad1.left_stick_y;
+            robot.frontrightPower = gamepad1.right_stick_y;
+            robot.backrightPower = gamepad1.right_stick_y;
+
+            if((gamepad1.dpad_right || gamepad1.dpad_left) || (gamepad1.dpad_up || gamepad1.dpad_down))
             {
-                robot.linearSlide.setPower(-1);
+                if (gamepad1.dpad_left) // left
+                {
+                    robot.moveFB(0.6);
+
+                } else if (gamepad1.dpad_right) // right
+                {
+                    // move backwards
+                    robot.moveFB(-0.6);
+                }
+
+                if (gamepad1.dpad_down) // down
+                {
+                    // move right
+                    robot.moveLR(-0.7);
+
+                }
+                else if (gamepad1.dpad_up) // forward
+                {
+                    // move left
+                    robot.moveLR(0.7);
+                }
+
+                if (gamepad1.dpad_right && gamepad1.dpad_up) // up right
+                {
+                    // up left
+                    robot.backleftPower = -0.8;
+                    robot.frontleftPower = 0.15;
+                    robot.frontrightPower = -0.8;
+                    robot.backrightPower = 0.15;
+                }
+                else if (gamepad1.dpad_right && gamepad1.dpad_down) // down right
+                {
+                    // up right
+                    robot.backleftPower = 0.15;
+                    robot.frontleftPower = -0.8;
+                    robot.frontrightPower = 0.15;
+                    robot.backrightPower = -0.8;
+
+                } else if (gamepad1.dpad_left && gamepad1.dpad_up) // up left
+                {
+
+                    // down left
+                    robot.backleftPower = -0.15;
+                    robot.frontleftPower = 0.8;
+                    robot.frontrightPower = -0.15;
+                    robot.backrightPower = 0.8;
+
+                }
+                else if (gamepad1.dpad_left && gamepad1.dpad_down) // down left
+                {
+
+                    // down right
+                    robot.backleftPower = 0.8;
+                    robot.frontleftPower = -0.15;
+                    robot.frontrightPower = 0.8;
+                    robot.backrightPower = -0.15;
+                }
             }
-            else if(gamepad1.dpad_up)
+            if(gamepad2.dpad_down)
             {
                 robot.linearSlide.setPower(1);
+            }
+            else if(gamepad2.dpad_up)
+            {
+                robot.linearSlide.setPower(-1);
             }
             else
             {
                 robot.linearSlide.setPower(0);
             }
+            if(gamepad2.dpad_right)
+                robot.armServo.setPower(-1);
+            else if(gamepad2.dpad_left)
+                robot.armServo.setPower(1);
+            else
+                robot.armServo.setPower(0);
+
 
             telemetry.addData("Distance to Block: ", robot.blocksideDistance.getDistance(DistanceUnit.CM));
             telemetry.addLine("RIGHT");

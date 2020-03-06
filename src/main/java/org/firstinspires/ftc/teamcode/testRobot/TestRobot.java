@@ -51,12 +51,12 @@ public class TestRobot
     public DcMotor  frontright  = null;
     public DcMotor  backleft    = null;
     public DcMotor  backright   = null;
-    public DcMotor  linearSlide     = null;
+    public DcMotor  linearSlide = null;
 
-
+    public CRServo armServo = null;
 
     public DistanceSensor blocksideDistance;
-    public ColorSensor blockColorRight, blockColorLeft;
+    public ColorSensor blockColorRight, blockColorLeft, lineColor;
     public BNO055IMU imu; // gyro and accelorometer
 
     public double frontleftPower, frontrightPower, backleftPower, backrightPower;  // motor powers
@@ -85,8 +85,9 @@ public class TestRobot
         backright   = hwMap.get(DcMotor.class, "backright");
         linearSlide = hwMap.get(DcMotor.class, "linearslide");
 
+        armServo = hwMap.get(CRServo.class, "arm");
+
         // SET THE DIRECTIONS
-        
         frontleft.setDirection(DcMotor.Direction.REVERSE);
         backleft.setDirection(DcMotor.Direction.REVERSE);
         frontright.setDirection(DcMotor.Direction.FORWARD);
@@ -107,9 +108,9 @@ public class TestRobot
 
         // set up the i2c devices
         blocksideDistance = hwMap.get(DistanceSensor.class, "blocksidedistance");
-
         blockColorLeft = hwMap.get(ColorSensor.class, "blockcolorleft");
         blockColorRight = hwMap.get(ColorSensor.class, "blockcolorright");
+        lineColor = hwMap.get(ColorSensor.class, "undercolor");
     }
 
     public void updateMotorPower()
@@ -151,6 +152,23 @@ public class TestRobot
         updateMotorPower();
     }
 
+    public void moveFB(double power)
+    {
+        // positive input makes robot go forward
+        // negative input makes robot go backward
+
+        frontleft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        frontright.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        backright.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        backleft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        frontrightPower = power;
+        frontleftPower = power;
+        backrightPower = power;
+        backleftPower = power;
+
+        updateMotorPower();
+    }
+
     public void moveLR(double power, int ticks)
     {
         // positive power makes the robot strafes left
@@ -163,6 +181,7 @@ public class TestRobot
         backrightPower = power;
 
         resetEncoder();
+
         backleft.setTargetPosition(-ticks);
         frontleft.setTargetPosition(ticks);
         frontright.setTargetPosition(-ticks);
